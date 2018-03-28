@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+            <div class="starter-template">
+                <h2>Admin page</h2>
+
+            </div>
+            <div id="entries">
+                <div>
+                    <h3>User management</h3>
+                    <ul>
+                        <li><a th:href="@{/admin/users}">Search user</a></li>
+                        <li><a th:href="@{/admin/user/new}">New user</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Posts management</h3>
+                    <ul>
+                        <li><a th:href="@{/admin/posts}">Posts</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </body>
+</html>

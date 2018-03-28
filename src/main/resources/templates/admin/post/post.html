@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+
+            <div class="starter-template">
+                <h2>Edit post</h2>
+            </div>
+
+            <div id="entries">
+                <span th:utext="${message}"></span>
+
+                <form autocomplete="off" action="#" th:action="@{/admin/post/savepost}" th:object="${postEditForm}" method="post" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <span th:utext="${postEditForm.id}"></span>
+                            <input type="hidden" th:value="${postEditForm.id}" name="id" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="validation-message" required="required"></label>
+                            <input type="text" th:field="*{text}" placeholder="post text.." class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-1">
+                            <button type="submit" class="btn btn-primary btn-block">Save</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="col-xs-3" th:if="${post.passedModeration == false}">
+                        <form autocomplete="off" action="#" th:action="@{/admin/post/activate}" th:object="${postEditForm}" method="post" class="form-horizontal" role="form">
+                            <input type="hidden" th:value="${postEditForm.id}" name="id" />
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-block">Activate post</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-xs-3">
+                        <form autocomplete="off" action="#" th:action="@{/admin/post/delete}" th:object="${postEditForm}" method="post" class="form-horizontal" role="form">
+                            <input type="hidden" th:value="${postEditForm.id}" name="id" />
+                            <div class="form-group">
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-block">Delete post</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </body>
+</html>

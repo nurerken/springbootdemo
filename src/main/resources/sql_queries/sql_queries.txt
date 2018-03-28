@@ -1,0 +1,50 @@
+CREATE TABLE public.users  (
+	id    	    serial NOT NULL,
+	firstname  	varchar(128) NOT NULL,
+	lastname    varchar(128) NOT NULL,
+	email       varchar(256) NOT NULL,
+	password    varchar(1024) NOT NULL,
+	active      boolean NOT NULL,
+	PRIMARY KEY(id)
+)
+
+CREATE TABLE public.user_roles  (
+	id    	serial NOT NULL,
+	name  	varchar(128) NOT NULL,
+	description   varchar(1024) NOT NULL,
+	PRIMARY KEY(id)
+)
+
+insert into user_roles (name, description) values('admin', 'God rights')
+insert into user_roles (name, description) values('moderator', 'can edit/remove posts')
+
+CREATE TABLE public.user_role_links (
+	id      	  serial NOT NULL,
+	user_id  	  int NOT NULL,
+	role_id       int NOT NULL,
+	PRIMARY KEY(id)
+)
+
+insert into user_role_links (user_id, role_id) values(1, 1)
+insert into user_role_links (user_id, role_id) values(1, 2)
+insert into user_role_links (user_id, role_id) values(2, 2)
+
+
+CREATE TABLE public.posts  (
+	id    	    serial NOT NULL,
+	text  	    varchar(2048) NOT NULL,
+	date        timestamp  NOT NULL,
+	userid      int NOT NULL,
+	passed_moderation    boolean NOT NULL
+)
+
+CREATE TABLE public.comments  (
+     id               	serial NOT NULL,
+     text             	varchar(2000) NOT NULL,
+     date             	date NOT NULL DEFAULT now(),
+     user_id           	int4 NOT NULL DEFAULT 0,
+     post_id           	int4 NOT NULL DEFAULT 0,
+     PRIMARY KEY(id)
+)
+
+CREATE SEQUENCE hibernate_sequence START 1;

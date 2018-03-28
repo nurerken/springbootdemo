@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Posts</title>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+            <div class="starter-template">
+                 <h2>Posts</h2>
+                <span th:text="${message}"></span>
+            </div>
+
+            <div id="entries">
+                <h1>New posts</h1>
+                 <div th:each="post, it : ${newPosts}" th:with="index = ${it.count}">
+                     <div class="panel panel-default" th:fragment="post" th:id="post+${post.id}">
+                         <div class="panel-heading">
+                             <h3 th:text="${index} + '. ' + ${post.user.firstName} + ' ' + ${post.user.lastName}">author name</h3>
+                         </div>
+                         <div class="panel-body">
+                             <blockquote class="entrytext" th:text="${post.text}"></blockquote>
+                             <footer class="date" th:text="${#dates.format(post.date, 'dd-MMM-yyyy')}">Datum</footer>
+                             <a th:href="@{'/admin/post/' + ${post.id}}">Edit</a>
+                         </div>
+                     </div>
+                 </div>
+
+                <h1>Posts passed moderation</h1>
+                <div style="margin-top:10px;margin-bottom:10px;">
+                    <form autocomplete="off" action="#" th:action="@{/admin/posts}" th:object="${postSearchForm}" method="get" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <div class="col-sm-5">
+                                <input type="text" th:field="*{searchString}" placeholder="post text, author name.." class="form-control" autofocus="true"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <button type="submit" class="btn btn-primary btn-block">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div th:each="post, it : ${postsPassedModeration}" th:with="index = ${it.count}">
+                    <div class="panel panel-default" th:fragment="post" th:id="post+${post.id}">
+                        <div class="panel-heading">
+                            <h3 th:text="${index} + '. ' + ${post.user.firstName} + ' ' + ${post.user.lastName}">author name</h3>
+                        </div>
+                        <div class="panel-body">
+                            <blockquote class="entrytext" th:text="${post.text}"></blockquote>
+                            <footer class="date" th:text="${#dates.format(post.date, 'dd-MMM-yyyy')}">Datum</footer>
+                            <a th:href="@{'/admin/post/' + ${post.id}}">Edit</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </body>
+</html>

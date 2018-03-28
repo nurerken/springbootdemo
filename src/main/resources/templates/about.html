@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+
+            <div class="starter-template">
+                <h3>Welcome to demo Guestbook web-site built using Spring Boot. You can register and make posts as well as comment others' posts</h3>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </body>
+</html>

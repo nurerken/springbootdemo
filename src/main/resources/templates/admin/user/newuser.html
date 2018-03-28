@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+            <div class="starter-template">
+                <h2>New user</h2>
+            </div>
+            <div id="entries">
+                <form autocomplete="off" action="#" th:action="@{/admin/user/new}" th:object="${createUserForm}" method="post" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="text" th:field="*{firstName}" placeholder="First name" class="form-control" required="required"/>
+                            <label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message"></label>
+                            <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message"></label>
+                            <input type="text" th:field="*{email}" placeholder="Email" class="form-control" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="password" th:field="*{password}" placeholder="Password" class="form-control" required="required"/>
+                            <label th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="validation-message"></label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <input type="password" th:field="*{passwordConfirm}" placeholder="Password confirm" class="form-control" required="required"/>
+                            <label th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}" class="validation-message"></label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <button type="submit" class="btn btn-primary btn-block">Register User</button>
+                        </div>
+                    </div>
+                    <span th:utext="${message}"></span>
+                </form>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+
+    </body>
+</html>

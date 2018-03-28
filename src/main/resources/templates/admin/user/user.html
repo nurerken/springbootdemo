@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+
+            <div class="starter-template">
+                <h2>Edit user</h2>
+            </div>
+
+            <div id="entries">
+                <span th:utext="${message}"></span>
+                <form autocomplete="off" action="#" th:action="@{/admin/saveuser}" th:object="${userEditForm}" method="post" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <span th:utext="${userEditForm.id}"></span>
+                            <input type="hidden" th:value="${userEditForm.id}" name="id" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="validation-message" required="required"></label>
+                            <input type="text" th:field="*{firstName}" placeholder="First name" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="validation-message" required="required"></label>
+                            <input type="text" th:field="*{lastName}" placeholder="Last Name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="validation-message" required="required"></label>
+                            <input type="text" th:field="*{email}" placeholder="Email" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-primary btn-block">Save</button>
+                        </div>
+                    </div>
+                </form>
+
+                <form autocomplete="off" action="#" th:action="@{/admin/user/delete}" th:object="${userEditForm}" method="post" class="form-horizontal" role="form">
+                    <input type="hidden" th:value="${userEditForm.id}" name="id" />
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <button type="submit" class="btn btn-primary btn-block">delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </body>
+</html>

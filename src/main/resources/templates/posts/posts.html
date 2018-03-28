@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+        <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+        <title>Posts</title>
+        <div th:replace="fragments/header :: header-css"/>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+        <script type="text/javascript">
+            function submitComment(postId, textAreaNum){
+                var textAreaVal = jQuery('#post_' + textAreaNum).val();
+
+                var submitData = {}
+                submitData["comment"] = textAreaVal;
+                submitData["postId"] = postId;
+
+                var token =  jQuery('#_csrf').attr('content');
+                var header = jQuery('#_csrf_header').attr('content');
+
+                jQuery.ajax({
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    url: '/post/newcomment',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: "application/json",
+                    data: JSON.stringify(submitData),
+                    success: function (data) {
+                        if(!data || data.resultCode!='OK') {
+                            this.error(data);
+                            return;
+                        }
+
+                        var showText =  '<div class="panel-heading">'+
+                                            '<p>' + data.result.userFullName +'</p>' +
+                                            '<h4>' + data.result.commentText + '</h4>' +
+                                            '<p>' + data.result.dateString + '</p>' +
+                                        '</div>';
+
+                        jQuery('#commentsDiv_' + textAreaNum).prepend(showText);
+                    },
+                    error: function (data) {
+                        if(data.errorsGlobal) {
+                            jQuery(data.errorsGlobal).each(function(i, v) {
+                                alert(v);
+                            })
+                        }
+                        else {
+                            alert('Internet connection problem');
+                        }
+                    },
+                    complete: function(c) {
+                        //alert('complete' + c);
+                    }
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div th:replace="fragments/header :: header"/>
+
+        <div class="container">
+            <div class="starter-template">
+                 <h1>Spring Boot Demo</h1>
+                 <span th:text="${message}"></span>
+            </div>
+            <div>
+                <form action="#" id ="postForm" th:action="@{/post/newPost}" th:object="${createPostForm}" method="post">
+                    <div class="row form-group">
+                        <div class="col-lg-6">
+                            <label for="postTextarea" class="sr-only">Post:</label>
+                            <textarea type="text" id="postTextarea" th:field="*{text}" class="form-control"  placeholder="Your post here" required="required" style="width:500px;height: 150px;"/>
+                        </div>
+                        <div class="col-lg-4">
+                            <span class="label label-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Text error message</span>
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-success" value="Submit post"/>
+                </form>
+            </div>
+            <div id="entries">
+                 <div th:each="post, it : ${posts}" th:with="index = ${it.count}">
+                     <div class="panel panel-default" th:fragment="post" th:id="post+${post.id}">
+                         <div class="panel-heading">
+                             <h3 th:text="${index} + '. ' + ${post.user.firstName} + ' ' + ${post.user.lastName}">author name</h3>
+                         </div>
+                         <div class="panel-body">
+                             <blockquote class="entrytext" th:text="${post.text}"></blockquote>
+                             <div sec:authorize="isAuthenticated()" th:if="${post.user.email == loggedInUser.email}">
+                                 edit link. <span th:text="${loggedInUser.firstName}"/>
+                             </div>
+                             <footer class="date" th:text="${#dates.format(post.date, 'dd-MMM-yyyy HH:mm:ss')}">Datum</footer>
+                         </div>
+                         <div class="panel-body">
+                             <div class="row form-group">
+                                <!--<label for="'post_' + ${index}" class="sr-only">Add comment:</label>-->
+                                <textarea type="text" th:id="'post_' + ${index}" style="width:400px;height: 100px;"/>
+                             </div>
+                             <input type="button" class="btn " value="Submit" th:onclick="'submitComment('+${post.id}+', '+${index}+');'"/>
+                         </div>
+                         <div th:id="'commentsDiv_' + ${index}">
+                             <div class="panel-heading" th:each="comment : ${post.comments}">
+                                 <p th:text= "${comment.user.lastName} + ' ' + ${comment.user.firstName} + ':'">comment author</p>
+                                 <h4 th:text= "${comment.text}">comment text</h4>
+                                 <p th:text="${#dates.format(comment.date, 'dd-MMM-yyyy HH:mm:ss')}"></p>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+        </div>
+
+        <div th:replace="fragments/footer :: footer"/>
+    </body>
+</html>
