@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@TestPropertySource(locations = "classpath:application-integration-test.properties")
 public class PostRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
