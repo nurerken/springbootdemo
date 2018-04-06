@@ -11,5 +11,5 @@ import javax.validation.constraints.Size;
 public class CreatePostForm {
     @NotNull
     @Size(min=10, max=100, message = "Post length must be at least 10")
-    private String text;k
+    private String text;
 }
